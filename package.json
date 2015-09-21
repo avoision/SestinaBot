@@ -1,0 +1,25 @@
+{
+    "name"            : "sestinaBot",
+    "version"         : "1.0.0",
+    "description"     : "A Twitter bot that creates a sestina, using a combination of tweets from different individuals.",
+    "author"          : "Felix Jung",
+    "main"            : "sestina.js", 
+    "scripts"         : {
+        "start" : "node sestina.js"
+    },
+    "engines"         : {
+        "node": "0.12.x"
+    },
+    "dependencies"    : {
+        "async"             : "~1.4.2",
+        "underscore"        : "~1.8.3",
+        "node-rest-client"  : "~1.5.1",
+        "twit"              : "~2.1.0",
+        "wordfilter"        : "~0.2.1",
+        "request"           : "~2.62.0",
+        "emoji-regex"       : "~6.0.0",
+        "tumblr.js"         : "~0.0.5",
+        "fast-levenshtein"  : "~1.0.7",        
+        "rita"              : "~1.1.1"
+    }
+}
