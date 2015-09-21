@@ -374,6 +374,7 @@ isMultiline = false;
 // }
 
 				var tweetData = {
+					word: word,
 					tweet: tweetOriginal,
 					tweetID: currentTweetID,
 					tweetLength: tweetLowerCase.length,
@@ -415,29 +416,24 @@ nextFunction = function(botData, cb) {
 
 	for (var i = botData.twitterResults.length - 1; i >= 0; i--) {
 		for (var j = botData.twitterResults[i].length; j >=0; j--) {
+			if (botData.twitterResults[i][j] == undefined) {
+				botData.twitterResults[i].splice(j, 1);
+				continue;
+			};
 
-			console.log(JSON.stringify(botData.twitterResults[i][j]));
-			console.log(botData.twitterResults[i][j].length);				// Problem here.
-
-			// if (botData.twitterResults[i][j].length == 0) {
-			// 	botData.twitterResults[i].splice(j, 1);
-			// 	continue;
-			// };
-
-			// if (botData.twitterResults[i][j].length < botData.minTweets) {
-			// 	botData.twitterResults[i].splice(j, 1);
-			// };
+			if (botData.twitterResults[i][j].length < botData.minTweets) {
+				botData.twitterResults[i].splice(j, 1);
+			};
 		}
 	};
-
-	// console.log(JSON.stringify(botData.twitterResults[0]));
 
 	for (var x = 0; x < botData.twitterResults.length; x++) {
 		for (var y = 0; y < botData.twitterResults[x].length; y++) {
 			console.log(" --------------------------- ");
+			console.log(botData.twitterResults[x][y][0].word);
+			console.log(" --------------------------- ");
 			
 			for (var z = 0; z < botData.twitterResults[x][y].length; z++) {
-				// console.log(JSON.stringify(botData.twitterResults[x][y][z].tweet));
 				console.log(botData.twitterResults[x][y][z].tweet + " (" + botData.twitterResults[x][y][z].tweet.length + ")");
 			}
 		}
