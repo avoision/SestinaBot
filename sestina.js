@@ -59,15 +59,15 @@ var statsTracker = {
 		blacklist: 0,
 		emoji: 0,
 		hasNumber: 0,
-		length: 0
-		// notNearEnd: 0,
-		// excessivePunctuation: 0,
-		// noPunctuationAtEnd: 0,
-		// punctuationMisMatchAtEnd: 0,
-		// repetition: 0,
-		// selfReference: 0,
-		// slang: 0,
-		// upper: 0
+		length: 0,
+		notNearEnd: 0,
+		excessivePunctuation: 0,
+		noPunctuationAtEnd: 0,
+		punctuationMisMatchAtEnd: 0,
+		repetition: 0,
+		selfReference: 0,
+		slang: 0,
+		upper: 0
 	}
 };
 
@@ -97,14 +97,15 @@ getRandomWords = function(cb) {
 
     var wordnikRandomOptions = {
     	hasDictionaryDef: "true",
-		includePartOfSpeech: "noun, adjective, verb, adverb",
+		// includePartOfSpeech: "noun, adjective, verb, adverb",
+		includePartOfSpeech: "noun, verb",
 		minCorpusCount: "30000",
 		maxCorpusCount: "-1",
 		minDictionaryCount: "3",
 		maxDictionaryCount: "-1",
 		minLength: "3",
 		maxLength: "7",
-limit: "5",	// 50 
+limit: "50",	// 50 
 		api_key: wordnikKey
     };
 
@@ -148,11 +149,6 @@ cleanRandomWords = function(botData, result, cb) {
 		};
 	};
 
-// Testing
-// var randomPos = Math.floor(Math.random() * botData.allWords.length);
-// botData.allWords = new Array(botData.allWords[randomPos]);
-// console.log(botData.allWords);
-
 	cb(null, botData);
 };
 
@@ -168,12 +164,12 @@ getAllPublicTweets = function(botData, cb) {
 	    	} else {
 	    		console.log('--------- End Round ' + (botData.counter + 1) + '---------');
 	    		if (results != null) {   			
-botData.twitterResults.push(results);
+					botData.twitterResults.push(results);
 	    		}
 
 	    		botData.counter++;
 
-if (botData.counter == botData.twitterResults.length) {
+				if (botData.counter == botData.twitterResults.length) {
 	    			cb(null, botData);
 	    		} else {
 	    			getAllTweetsSequence(botData.counter);
@@ -265,20 +261,20 @@ getTweetsByWord = function(word, cb) {
 						continue;				 	
 				}
 
-// Keep within preferred character length
-// var tweetLengthMin = 30,
-// 	tweetLengthMax = 65,
-// 	tweetMultiLengthMin = 45,
-// 	tweetMultiLengthMax = 65,
-// 	tweetRegularLengthMin = 30,
-// 	tweetRegularLengthMax = 47;
+				// Keep within preferred character length
+				var tweetLengthMin = 0,
+					tweetLengthMax = 85,
+					tweetMultiLengthMin = 50,
+					tweetMultiLengthMax = 85,
+					tweetRegularLengthMin = 0,
+					tweetRegularLengthMax = 50;
 
 
-// if ((tweetLowerCase.length <= tweetLengthMax) && (tweetLowerCase.length >= tweetLengthMin)) {
-// } else {
-// 	statsTracker.rejectTracker.length++;
-// 	continue;
-// }
+				if ((tweetLowerCase.length <= tweetLengthMax) && (tweetLowerCase.length >= tweetLengthMin)) {
+				} else {
+					statsTracker.rejectTracker.length++;
+					continue;
+				}
 
 				// Remove punctuation
 				var ritaTweet = tweetLowerCase.replace(/[?.,-\/#!$%\^&\*;:{}=\-_`~()]/g,""),
@@ -288,49 +284,46 @@ getTweetsByWord = function(word, cb) {
 					maxSlangAllowed = 0,
 					hasSlang = false;
 
-// var wordPos = ritaTweetWordsArray.lastIndexOf(word), 
-// 	maxDistanceUntilEnd = 4,
-// 	isMultiline = false;
+				var wordPos = ritaTweetWordsArray.lastIndexOf(word), 
+					maxDistanceUntilEnd = 4,
+					isMultiline = false;
 
 				var prefix = '',
 					suffix = '';
 
-// // Is our word within X characters of the end of the tweet?
-// if ((ritaTweetWordsArray.length - wordPos) <= maxDistanceUntilEnd ) {
+				// Is our word within X characters of the end of the tweet?
+				if ((ritaTweetWordsArray.length - wordPos) <= maxDistanceUntilEnd ) {
 
-// 	// Is our word NOT the last word in the tweet?
-// 	if ((ritaTweetWordsArray.length - wordPos) > 1) {
-// 		isMultiline = true;
+					// Is our word NOT the last word in the tweet?
+					if ((ritaTweetWordsArray.length - wordPos) > 1) {
+						isMultiline = true;
 
-// 		var wordPosStart = tweetOriginal.toLowerCase().lastIndexOf(word),
-// 			wordPosEnd = wordPosStart + word.length + 1;
+						var wordPosStart = tweetOriginal.toLowerCase().lastIndexOf(word),
+							wordPosEnd = wordPosStart + word.length + 1;
 
-// 		var prefix = tweetOriginal.slice(0, wordPosEnd),
-// 			suffix = tweetOriginal.slice(wordPosEnd);
+						var prefix = tweetOriginal.slice(0, wordPosEnd),
+							suffix = tweetOriginal.slice(wordPosEnd);
 
-// 			suffix = suffix.trim();
+							suffix = suffix.trim();
 
-// 		prefix = prefix.charAt(0).toUpperCase() + prefix.slice(1);
+						prefix = prefix.charAt(0).toUpperCase() + prefix.slice(1);
 
-// 		// Is last character in suffix appropriate punctuation? Is yes, add space.
-// 		if (/[?!.]/.test(suffix.charAt(suffix.length-1))) {
-// 			suffix += " ";
-// 		} else {
-// 			statsTracker.rejectTracker.punctuationMisMatchAtEnd++;
-// 			continue;
-// 		}
-// 	} else {
-// 		// Our word is the last word in the tweet
-// 		isMultiline = false;					
-// 	};
-// } else {
-// 	// console.log("- notNearEnd: ");
-// 	statsTracker.rejectTracker.notNearEnd++;
-// 	continue;
-// }
-
-
-isMultiline = false;
+						// Is last character in suffix appropriate punctuation? Is yes, add space.
+						if (/[?!.]/.test(suffix.charAt(suffix.length-1))) {
+							suffix += " ";
+						} else {
+							statsTracker.rejectTracker.punctuationMisMatchAtEnd++;
+							continue;
+						}
+					} else {
+						// Our word is the last word in the tweet
+						isMultiline = false;					
+					};
+				} else {
+					// console.log("- notNearEnd: ");
+					statsTracker.rejectTracker.notNearEnd++;
+					continue;
+				}
 
 				// Check lexicon for words, mark all else as slang
 				for (var p = 0; p < ritaTweetWordsArray.length; p++) {
@@ -351,27 +344,26 @@ isMultiline = false;
 					continue;					
 				};
 
-
 				var multiRegularLengthCheck = false;
 
-// // If multi, range needs to be 50 - 70
-// // If regular, range needs to be < 50 > 35.
-// // Ensure that word exists within 25% of total tweet length;
-// if ((isMultiline) 
-// 	&& (tweetLowerCase.length >= tweetMultiLengthMin) 
-// 	&& (tweetLowerCase.length <= tweetMultiLengthMax)) {
-// 		multiRegularLengthCheck = true;
-// 		statsTracker.hasMultiline++;
-// } else if ((isMultiline == false)
-// 	&& (tweetLowerCase.length >= tweetRegularLengthMin) 
-// 	&& (tweetLowerCase.length <= tweetRegularLengthMax)) {
-// 		multiRegularLengthCheck = true;
-// };
+				// If multi, range needs to be 50 - 80
+				// If regular, range needs to be < 50 > 25.
+				// Ensure that word exists within 25% of total tweet length;
+				if ((isMultiline) 
+					&& (tweetLowerCase.length >= tweetMultiLengthMin) 
+					&& (tweetLowerCase.length <= tweetMultiLengthMax)) {
+						multiRegularLengthCheck = true;
+						statsTracker.hasMultiline++;
+				} else if ((isMultiline == false)
+					&& (tweetLowerCase.length >= tweetRegularLengthMin) 
+					&& (tweetLowerCase.length <= tweetRegularLengthMax)) {
+						multiRegularLengthCheck = true;
+				};
 
-// if (multiRegularLengthCheck == false) {
-// 	statsTracker.rejectTracker.length++;
-// 	continue;
-// }
+				if (multiRegularLengthCheck == false) {
+					statsTracker.rejectTracker.length++;
+					continue;
+				}
 
 				var tweetData = {
 					word: word,
@@ -475,6 +467,7 @@ rateLimitCheck = function(cb) {
 			console.log("Next reset at: " + hour + ":" + min + ":" + sec + " in " + minRemaining + ":" + secRemaining );
 
 			console.log('---------------------------');
+			console.log("Total: " + statsTracker.total);
 			console.log(JSON.stringify(statsTracker.rejectTracker, null, 2));
 		}
 	});
