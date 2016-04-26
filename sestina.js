@@ -101,10 +101,10 @@ getRandomWords = function(cb) {
 		includePartOfSpeech: "noun, verb",
 		minCorpusCount: "30000",
 		maxCorpusCount: "-1",
-		minDictionaryCount: "3",
+		minDictionaryCount: "6",
 		maxDictionaryCount: "-1",
 		minLength: "3",
-		maxLength: "7",
+		maxLength: "6",
 limit: "50",	// 50 
 		api_key: wordnikKey
     };
@@ -252,22 +252,22 @@ getTweetsByWord = function(word, cb) {
 				}
 
 				// Repeat offenders.
-				if (
-					(tweetLowerCase.indexOf('men cry and defy') > -1) || 
-				   	(tweetLowerCase.indexOf('episode of teen wolf') > -1) || 
-				   	(tweetLowerCase.indexOf('head in a comfortable bed') > -1)
-				   ) {
-						statsTracker.rejectTracker.repetition++;
-						continue;				 	
-				}
+				// if (
+				// 	(tweetLowerCase.indexOf('men cry and defy') > -1) || 
+				//    	(tweetLowerCase.indexOf('episode of teen wolf') > -1) || 
+				//    	(tweetLowerCase.indexOf('head in a comfortable bed') > -1)
+				//    ) {
+				// 		statsTracker.rejectTracker.repetition++;
+				// 		continue;				 	
+				// }
 
 				// Keep within preferred character length
 				var tweetLengthMin = 0,
-					tweetLengthMax = 85,
-					tweetMultiLengthMin = 50,
-					tweetMultiLengthMax = 85,
+					tweetLengthMax = 100,
+					tweetMultiLengthMin = 85,
+					tweetMultiLengthMax = 100,
 					tweetRegularLengthMin = 0,
-					tweetRegularLengthMax = 50;
+					tweetRegularLengthMax = 85;
 
 
 				if ((tweetLowerCase.length <= tweetLengthMax) && (tweetLowerCase.length >= tweetLengthMin)) {
@@ -343,6 +343,9 @@ getTweetsByWord = function(word, cb) {
 					statsTracker.rejectTracker.slang++;
 					continue;					
 				};
+
+
+				console.log(tweetLowerCase);
 
 				var multiRegularLengthCheck = false;
 
