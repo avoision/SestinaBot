@@ -99,13 +99,13 @@ getRandomWords = function(cb) {
     	hasDictionaryDef: "true",
 		// includePartOfSpeech: "noun, adjective, verb, adverb",
 		includePartOfSpeech: "noun, verb",
-		minCorpusCount: "30000",
+		minCorpusCount: "60000",
 		maxCorpusCount: "-1",
-		minDictionaryCount: "6",
+		minDictionaryCount: "30",
 		maxDictionaryCount: "-1",
 		minLength: "3",
-		maxLength: "6",
-limit: "50",	// 50 
+		maxLength: "8",
+limit: "70",	// 50 
 		api_key: wordnikKey
     };
 
@@ -264,10 +264,10 @@ getTweetsByWord = function(word, cb) {
 				// Keep within preferred character length
 				var tweetLengthMin = 0,
 					tweetLengthMax = 100,
-					tweetMultiLengthMin = 85,
+					tweetMultiLengthMin = 0,
 					tweetMultiLengthMax = 100,
-					tweetRegularLengthMin = 0,
-					tweetRegularLengthMax = 85;
+					tweetRegularLengthMin = 10,
+					tweetRegularLengthMax = 80;
 
 
 				if ((tweetLowerCase.length <= tweetLengthMax) && (tweetLowerCase.length >= tweetLengthMin)) {
@@ -344,9 +344,6 @@ getTweetsByWord = function(word, cb) {
 					continue;					
 				};
 
-
-				console.log(tweetLowerCase);
-
 				var multiRegularLengthCheck = false;
 
 				// If multi, range needs to be 50 - 80
@@ -368,6 +365,7 @@ getTweetsByWord = function(word, cb) {
 					continue;
 				}
 
+
 				var tweetData = {
 					word: word,
 					tweet: tweetOriginal,
@@ -384,13 +382,13 @@ getTweetsByWord = function(word, cb) {
 				statsTracker.accepted++;
 				twitterResults.push(tweetData);
 
-// if (isMultiline) {
-// 	console.log('M ' + tweetData.tweet + " (" + tweetLowerCase.length + ")");
-// 	console.log('   Prefix: ' + prefix);
-// 	console.log('   Suffix: ' + suffix);
-// } else {
-// 	console.log("+ " + tweetData.tweet + " (" + tweetLowerCase.length + ")");
-// }
+if (isMultiline) {
+	console.log('M ' + tweetData.tweet + " (" + tweetLowerCase.length + ")");
+	console.log('   Prefix: ' + prefix);
+	console.log('   Suffix: ' + suffix);
+} else {
+	console.log("+ " + tweetData.tweet + " (" + tweetLowerCase.length + ")");
+}
 			}
 
 			twitterResults = _.uniq(twitterResults, false, function(p) { return p.tweet})
